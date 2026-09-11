@@ -114,7 +114,7 @@ const RecruiterLogin = () => {
               <input
                 type="email"
                 className="form-input"
-                placeholder="samuel.akran@bvdi.gov.ng"
+                placeholder="email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ paddingLeft: '2.5rem' }}

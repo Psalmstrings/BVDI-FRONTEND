@@ -114,7 +114,7 @@ const AdminLogin = () => {
               <input
                 type="email"
                 className="form-input"
-                placeholder="admin@bvdi.gov.ng"
+                placeholder="admin@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ paddingLeft: '2.5rem' }}
