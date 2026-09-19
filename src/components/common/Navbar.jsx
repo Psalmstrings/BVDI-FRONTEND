@@ -85,7 +85,7 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }}>
               <Link to="/recruiter/login" className="btn btn-outline btn-sm">
                 <UserCheck size={16} /> Recruiter Login
               </Link>

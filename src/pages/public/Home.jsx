@@ -456,63 +456,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* I. STATISTICS SECTION */}
-      <section
-        style={{
-          backgroundColor: '#004d2e',
-          color: '#FFFFFF',
-          padding: '4rem 0',
-        }}
-      >
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.5rem' }}>
-              Initiative Progress Overview
-            </h3>
-            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.8)' }}>
-              High-level non-sensitive summary of data collection progress.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 grid-cols-2 grid-cols-4 gap-6" style={{ textAlign: 'center' }}>
-            <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: '1.75rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00A9E0', display: 'block', lineHeight: 1 }}>
-                {stats.totalWards}
-              </span>
-              <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: '0.5rem', display: 'block' }}>
-                Total LGA Wards
-              </span>
-            </div>
-
-            <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: '1.75rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#FFFFFF', display: 'block', lineHeight: 1 }}>
-                {stats.registeredRecords.toLocaleString()}
-              </span>
-              <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: '0.5rem', display: 'block' }}>
-                Digitized Records
-              </span>
-            </div>
-
-            <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: '1.75rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#F15A24', display: 'block', lineHeight: 1 }}>
-                {stats.activeRecruiters}
-              </span>
-              <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: '0.5rem', display: 'block' }}>
-                Active Field Recruiters
-              </span>
-            </div>
-
-            <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: '1.75rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00A9E0', display: 'block', lineHeight: 1 }}>
-                {stats.coveragePercentage}%
-              </span>
-              <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: '0.5rem', display: 'block' }}>
-                LGA Ward Coverage
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
       {/* J. CALL TO ACTION */}
       <section style={{ padding: '5rem 0', backgroundColor: '#FFFFFF' }}>
