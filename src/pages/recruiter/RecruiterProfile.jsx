@@ -3,7 +3,7 @@ import Header from '../../components/common/Header';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { recruiterService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { UserCheck, ShieldCheck, Mail, Phone, MapPin, FileCheck, Calendar } from 'lucide-react';
+import { UserCheck, ShieldCheck, Mail, Phone, MapPin, FileCheck, Calendar, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const RecruiterProfile = ({ onMobileMenuToggle }) => {
@@ -101,7 +101,11 @@ const RecruiterProfile = ({ onMobileMenuToggle }) => {
               <Phone size={18} color="#007043" />
               <span><strong>Phone:</strong> {user?.phone}</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#475569', gridColumn: 'span 2' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#475569' }}>
+              <Building2 size={18} color="#007043" />
+              <span><strong>Assigned Ward:</strong> <span className="badge badge-green" style={{ marginLeft: '0.35rem' }}>{user?.assignedWard || profileData?.assignedWard || 'Unassigned'}</span></span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#475569' }}>
               <MapPin size={18} color="#007043" />
               <span><strong>Address:</strong> {user?.address || 'Badagry, Lagos State'}</span>
             </div>

@@ -15,6 +15,12 @@ import {
   ArrowRight,
   Eye,
   Search,
+  Mail,
+  Phone,
+  Filter,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -31,10 +37,28 @@ import {
   Cell,
 } from 'recharts';
 
+const BADAGRY_WARDS = [
+  'Ward A: Jegba',
+  'Ward B: Posukoh',
+  'Ward C: Awanjigoh',
+  'Ward D: Aovikoh',
+  'Ward E: Ajara Vetho',
+  'Ward F: Ajara Topa',
+  'Ward G: Ajido',
+  'Ward H: Iyafin',
+  'Ward I: Ikoga',
+  'Ward J: Topo-Idale',
+];
+
 const AdminDashboard = ({ onMobileMenuToggle }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Query Recruiters by Ward state
+  const [selectedWard, setSelectedWard] = useState('All');
+  const [wardRecruiters, setWardRecruiters] = useState([]);
+  const [wardRecruitersLoading, setWardRecruitersLoading] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -49,6 +73,26 @@ const AdminDashboard = ({ onMobileMenuToggle }) => {
     };
     fetchDashboard();
   }, []);
+
+  const fetchWardRecruiters = async (ward) => {
+    try {
+      setWardRecruitersLoading(true);
+      const params = { limit: 50 };
+      if (ward && ward !== 'All') {
+        params.ward = ward;
+      }
+      const res = await adminService.getRecruiters(params);
+      setWardRecruiters(res.recruiters || []);
+    } catch (err) {
+      console.error('Failed to load recruiters for ward:', err);
+    } finally {
+      setWardRecruitersLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWardRecruiters(selectedWard);
+  }, [selectedWard]);
 
   if (loading) return <LoadingSpinner fullPage text="Loading Badagry LGA Analytics..." />;
 
@@ -148,6 +192,266 @@ const AdminDashboard = ({ onMobileMenuToggle }) => {
             color="orange"
             subtitle="Past 7 days"
           />
+        </div>
+
+        {/* RECRUITERS BY WARD QUERY PANEL */}
+        <div
+          className="card"
+          style={{
+            marginBottom: '1.75rem',
+            padding: '1.5rem',
+            borderRadius: '16px',
+            border: '1px solid #E2E8F0',
+            backgroundColor: '#FFFFFF',
+            boxShadow: '0 4px 16px -2px rgba(0, 112, 67, 0.06)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              borderBottom: '1px solid #F1F5F9',
+              paddingBottom: '1rem',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <Building2 size={22} color="#007043" />
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#111111', margin: 0 }}>
+                  Query Field Recruiters by Ward
+                </h3>
+              </div>
+              <p style={{ fontSize: '0.825rem', color: '#64748B', marginTop: '0.25rem' }}>
+                Inspect and track authorized field recruiters assigned across Badagry wards
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Filter size={16} color="#64748B" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#475569' }}>Select Ward:</span>
+                <select
+                  className="form-select"
+                  value={selectedWard}
+                  onChange={(e) => setSelectedWard(e.target.value)}
+                  style={{ width: 'auto', fontWeight: 600, padding: '0.4rem 0.85rem', fontSize: '0.875rem' }}
+                >
+                  <option value="All">All Badagry Wards</option>
+                  {BADAGRY_WARDS.map((w) => (
+                    <option key={w} value={w}>
+                      {w}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <Link
+                to={`/admin/recruiters?action=new${selectedWard !== 'All' ? `&ward=${encodeURIComponent(selectedWard)}` : ''}`}
+                className="btn btn-primary btn-sm"
+              >
+                <UserPlus size={16} /> + Register Recruiter
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Telemetry Pill summary for this Ward */}
+          <div
+            style={{
+              backgroundColor: '#F8FAFC',
+              borderRadius: '10px',
+              padding: '0.75rem 1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+              marginBottom: '1.25rem',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.85rem', color: '#64748B' }}>Currently Querying:</span>
+              <span
+                style={{
+                  backgroundColor: selectedWard === 'All' ? '#F1F5F9' : '#e6f3ed',
+                  color: selectedWard === 'All' ? '#334155' : '#007043',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '6px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                }}
+              >
+                {selectedWard === 'All' ? 'All 10 Badagry Wards' : selectedWard}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.85rem', flexWrap: 'wrap' }}>
+              <span style={{ color: '#475569' }}>
+                Assigned Recruiters:{' '}
+                <strong style={{ color: '#111111' }}>{wardRecruiters.length}</strong>
+              </span>
+              <span style={{ color: '#475569' }}>
+                Active Field Agents:{' '}
+                <strong style={{ color: '#007043' }}>
+                  {wardRecruiters.filter((r) => r.status === 'active').length}
+                </strong>
+              </span>
+              <span style={{ color: '#475569' }}>
+                Total Voters Registered:{' '}
+                <strong style={{ color: '#F15A24' }}>
+                  {wardRecruiters.reduce((sum, r) => sum + (r.votersCount || 0), 0)}
+                </strong>
+              </span>
+            </div>
+          </div>
+
+          {/* Recruiter List or Empty State */}
+          {wardRecruitersLoading ? (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>
+              <LoadingSpinner text={`Fetching recruiters for ${selectedWard}...`} />
+            </div>
+          ) : wardRecruiters.length === 0 ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '2.5rem 1rem',
+                backgroundColor: '#FAFBFB',
+                borderRadius: '12px',
+                border: '1px dashed #CBD5E1',
+              }}
+            >
+              <Users size={36} color="#94A3B8" style={{ margin: '0 auto 0.75rem auto' }} />
+              <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#111111', marginBottom: '0.35rem' }}>
+                No Recruiters Assigned to {selectedWard === 'All' ? 'this query' : selectedWard}
+              </h4>
+              <p style={{ fontSize: '0.85rem', color: '#64748B', maxWidth: '420px', margin: '0 auto 1.25rem auto' }}>
+                {selectedWard === 'All'
+                  ? 'There are no recruiters registered in the database yet.'
+                  : `There are currently no field recruiters assigned to ${selectedWard}. Assign a recruiter to start grassroots voter registration in this ward.`}
+              </p>
+              <Link
+                to={`/admin/recruiters?action=new${selectedWard !== 'All' ? `&ward=${encodeURIComponent(selectedWard)}` : ''}`}
+                className="btn btn-primary btn-sm"
+              >
+                <UserPlus size={16} /> + Assign Recruiter to {selectedWard !== 'All' ? selectedWard : 'a Ward'}
+              </Link>
+            </div>
+          ) : (
+            <div className="table-container" style={{ margin: 0 }}>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Recruiter Name</th>
+                    <th>Recruiter Code</th>
+                    <th>Assigned Ward</th>
+                    <th>Contact Info</th>
+                    <th>Voters Registered</th>
+                    <th>Account Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wardRecruiters.map((r) => (
+                    <tr key={r._id}>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                          <div
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '50%',
+                              backgroundColor: '#fff0eb',
+                              color: '#F15A24',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 700,
+                              fontSize: '0.8rem',
+                            }}
+                          >
+                            {r.firstName.charAt(0)}{r.lastName.charAt(0)}
+                          </div>
+                          <div>
+                            <strong style={{ color: '#111111', fontSize: '0.9rem' }}>
+                              {r.firstName} {r.lastName}
+                            </strong>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span
+                          style={{
+                            backgroundColor: '#e6f3ed',
+                            color: '#007043',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '6px',
+                            fontWeight: 800,
+                            fontSize: '0.8rem',
+                            border: '1px solid #007043',
+                          }}
+                        >
+                          {r.recruiterCode}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          style={{
+                            backgroundColor: r.assignedWard ? '#e6f3ed' : '#F1F5F9',
+                            color: r.assignedWard ? '#007043' : '#64748B',
+                            padding: '0.25rem 0.55rem',
+                            borderRadius: '6px',
+                            fontWeight: 700,
+                            fontSize: '0.78rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            border: r.assignedWard ? '1px solid #B8E2D1' : '1px solid #CBD5E1',
+                          }}
+                        >
+                          <Building2 size={12} /> {r.assignedWard || 'Unassigned'}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ fontSize: '0.8rem', color: '#475569' }}>
+                          <div>{r.email}</div>
+                          <div style={{ color: '#64748B' }}>{r.phone}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="badge badge-green" style={{ fontSize: '0.8rem' }}>
+                          <FileCheck size={13} style={{ marginRight: '0.25rem' }} /> {r.votersCount || 0} Voters
+                        </span>
+                      </td>
+                      <td>
+                        {r.status === 'active' ? (
+                          <span className="badge badge-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem' }}>
+                            <CheckCircle size={12} /> Active
+                          </span>
+                        ) : (
+                          <span className="badge badge-gray" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem' }}>
+                            <XCircle size={12} /> Inactive
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        <Link
+                          to={`/admin/recruiters?filterWard=${encodeURIComponent(r.assignedWard || 'All')}`}
+                          className="btn btn-outline btn-sm"
+                          style={{ padding: '0.3rem 0.6rem', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}
+                        >
+                          Manage <ExternalLink size={12} />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Charts Row 1 */}

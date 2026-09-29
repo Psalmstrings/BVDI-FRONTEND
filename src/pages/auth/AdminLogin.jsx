@@ -15,19 +15,29 @@ const AdminLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password) {
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!cleanEmail || !password) {
       setError('Please provide both email address and password.');
       toast.error('Please enter all login credentials.');
       return;
     }
 
+    if (!EMAIL_REGEX.test(cleanEmail)) {
+      setError('Please enter a valid administrator email address with a valid domain (e.g. admin@bvdi.gov.ng).');
+      toast.error('Invalid email address format.');
+      return;
+    }
+
     try {
       setLoading(true);
-      await login(email, password, 'admin');
+      await login(cleanEmail, password, 'admin');
       toast.success('Admin authentication successful!');
       navigate('/admin/dashboard');
     } catch (err) {

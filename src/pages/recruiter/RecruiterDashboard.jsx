@@ -80,8 +80,28 @@ const RecruiterDashboard = ({ onMobileMenuToggle }) => {
             <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.85)' }}>
               Authorized Field Agent Code
             </span>
-            <div style={{ fontSize: '1.8rem', fontWeight: 800, letterSpacing: '0.05em', marginTop: '0.2rem' }}>
-              {user?.recruiterCode || 'REC-CODE'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.2rem', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '1.8rem', fontWeight: 800, letterSpacing: '0.05em' }}>
+                {user?.recruiterCode || 'REC-CODE'}
+              </span>
+              {user?.assignedWard && (
+                <span
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    color: '#FFFFFF',
+                    padding: '0.25rem 0.65rem',
+                    borderRadius: '8px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                  }}
+                >
+                  <Building2 size={14} /> Assigned: {user.assignedWard}
+                </span>
+              )}
             </div>
             <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', marginTop: '0.25rem' }}>
               Welcome back, <strong>{user?.firstName} {user?.lastName}</strong>. Ensure voter consent before submission.

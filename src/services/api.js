@@ -97,6 +97,12 @@ export const adminService = {
       body: JSON.stringify({ status }),
     }),
 
+  updateRecruiter: (id, data) =>
+    fetchAPI(`/admin/recruiters/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+
   getVoters: (params = {}) => {
     const query = new URLSearchParams(params).toString();
     return fetchAPI(`/admin/voters?${query}`);
